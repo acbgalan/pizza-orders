@@ -20,4 +20,9 @@
     <ProjectReference Include="..\pizza-orders.data\pizza-orders.data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Requests\" />
+    <Folder Include="Responses\" />
+  </ItemGroup>
+
 </Project>
