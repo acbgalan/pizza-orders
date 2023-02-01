@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using pizza_orders.data;
 using pizza_orders.data.Repositories;
 using pizza_orders.data.Repositories.Interfaces;
+using pizza_orders.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,7 @@ string dbConnection = builder.Configuration.GetConnectionString("ApplicationDefa
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(dbConnection));
 builder.Services.AddScoped<IPizzaRepository, PizzaRepository>();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
