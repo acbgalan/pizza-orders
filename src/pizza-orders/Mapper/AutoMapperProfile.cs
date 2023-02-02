@@ -16,6 +16,7 @@ namespace pizza_orders.Mapper
         {
             CreateMap<Pizza, PizzaResponse>();
             CreateMap<CreatePizzaRequest, Pizza>();
+            CreateMap<UpdatePizzaRequest, Pizza>();
         }
 
     }

@@ -57,7 +57,7 @@ namespace pizza_orders.Controllers
         {
             if (createPizzaRequest == null)
             {
-                return BadRequest(ModelState);
+                return BadRequest();
             }
 
             var pizza = _mapper.Map<Pizza>(createPizzaRequest);
@@ -72,7 +72,38 @@ namespace pizza_orders.Controllers
             return CreatedAtRoute("GetPizza", new { id = pizza.Id }, pizza);
         }
 
-        
+        [HttpPut("id:int")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> UpdatePizza(int id, UpdatePizzaRequest updatePizzaRequest)
+        {
+            if (updatePizzaRequest == null || id != updatePizzaRequest.Id)
+            {
+                return BadRequest();
+            }
+
+            var exits = await _pizzaRepository.ExitsAsync(id);
+
+            if (!exits)
+            {
+                return NotFound();
+            }
+
+            var pizza = _mapper.Map<Pizza>(updatePizzaRequest);
+            await _pizzaRepository.UpdateAsync(pizza);
+            int saveResult = await _pizzaRepository.SaveAsync();
+
+            if (!(saveResult > 0))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al guardar item");
+            }
+
+            return NoContent();
+        }
+
+
 
     }
 }
