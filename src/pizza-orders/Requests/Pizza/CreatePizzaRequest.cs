@@ -10,7 +10,7 @@ namespace pizza_orders.Requests.Pizza
     {
         [JsonPropertyName("name")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "El campo {0} es requerido")]
-        [StringLength(5, ErrorMessage = "Se esperaba una cadena de texto en el campo {0} con un máximo de {1} caracteres")]
+        [StringLength(50, ErrorMessage = "Se esperaba una cadena de texto en el campo {0} con un máximo de {1} caracteres")]
         public string Name { get; set; }
 
         [JsonPropertyName("description")]
