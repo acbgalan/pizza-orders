@@ -15,6 +15,6 @@ namespace pizza_orders.data.Repositories.Interfaces
         Task DeleteAsync(int id);
         Task DeleteAsync(T entity);
         Task<bool> ExitsAsync(int id);
-        Task<int> SaveASync();
+        Task<int> SaveAsync();
     }
 }
