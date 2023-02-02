@@ -18,7 +18,6 @@ namespace pizza_orders.Requests.Pizza
         public string Description { get; set; }
 
         [JsonPropertyName("prize")]
-        [Precision(9, 2)]
         public decimal Prize { get; set; }
 
         [JsonPropertyName("available")]
