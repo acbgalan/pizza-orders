@@ -55,7 +55,7 @@ namespace pizza_orders.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> CreatePizza([FromBody] CreatePizzaRequest createPizzaRequest)
         {
-            if(createPizzaRequest == null || !ModelState.IsValid)
+            if (createPizzaRequest == null)
             {
                 return BadRequest(ModelState);
             }
@@ -64,13 +64,15 @@ namespace pizza_orders.Controllers
             await _pizzaRepository.AddAsync(pizza);
             int saveResult = await _pizzaRepository.SaveAsync();
 
-            if(!(saveResult > 0))
+            if (!(saveResult > 0))
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al guardar item");
             }
 
             return CreatedAtRoute("GetPizza", new { id = pizza.Id }, pizza);
         }
+
+        
 
     }
 }
