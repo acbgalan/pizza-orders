@@ -11,8 +11,8 @@ using pizza_orders.data;
 namespace pizzaorders.data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230130150107_Inicial")]
-    partial class Inicial
+    [Migration("20230202212944_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,8 +41,8 @@ namespace pizzaorders.data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("Prize")
                         .HasPrecision(9, 2)

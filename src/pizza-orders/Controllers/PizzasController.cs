@@ -42,7 +42,7 @@ namespace pizza_orders.Controllers
 
             if (pizza == null)
             {
-                return NotFound();
+                return NotFound("Pizza no encontrada");
             }
 
             var pizzaResponse = _mapper.Map<PizzaResponse>(pizza);
@@ -55,21 +55,76 @@ namespace pizza_orders.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> CreatePizza([FromBody] CreatePizzaRequest createPizzaRequest)
         {
-            if(createPizzaRequest == null || !ModelState.IsValid)
+            if (createPizzaRequest == null)
             {
-                return BadRequest(ModelState);
+                return BadRequest();
             }
 
             var pizza = _mapper.Map<Pizza>(createPizzaRequest);
             await _pizzaRepository.AddAsync(pizza);
             int saveResult = await _pizzaRepository.SaveAsync();
 
-            if(!(saveResult > 0))
+            if (!(saveResult > 0))
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al guardar item");
             }
 
             return CreatedAtRoute("GetPizza", new { id = pizza.Id }, pizza);
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> UpdatePizza(UpdatePizzaRequest updatePizzaRequest)
+        {
+            if (updatePizzaRequest == null)
+            {
+                return BadRequest();
+            }
+
+            var exits = await _pizzaRepository.ExitsAsync(updatePizzaRequest.Id);
+
+            if (!exits)
+            {
+                return NotFound();
+            }
+
+            var pizza = _mapper.Map<Pizza>(updatePizzaRequest);
+            await _pizzaRepository.UpdateAsync(pizza);
+            int saveResult = await _pizzaRepository.SaveAsync();
+
+            if (!(saveResult > 0))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al guardar item");
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("id:int")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeletePizza(int id)
+        {
+            var exits = await _pizzaRepository.ExitsAsync(id);
+
+            if (!exits)
+            {
+                return NotFound("Pizza no encontrada");
+            }
+
+            await _pizzaRepository.DeleteAsync(id);
+            int saveResult = await _pizzaRepository.SaveAsync();
+
+            if (!(saveResult > 0))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al guardar item");
+            }
+
+            return NoContent();
         }
 
     }
