@@ -42,7 +42,7 @@ namespace pizza_orders.Controllers
 
             if (pizza == null)
             {
-                return NotFound();
+                return NotFound("Pizza no encontrada");
             }
 
             var pizzaResponse = _mapper.Map<PizzaResponse>(pizza);
@@ -72,19 +72,19 @@ namespace pizza_orders.Controllers
             return CreatedAtRoute("GetPizza", new { id = pizza.Id }, pizza);
         }
 
-        [HttpPut("id:int")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> UpdatePizza(int id, UpdatePizzaRequest updatePizzaRequest)
+        public async Task<ActionResult> UpdatePizza(UpdatePizzaRequest updatePizzaRequest)
         {
-            if (updatePizzaRequest == null || id != updatePizzaRequest.Id)
+            if (updatePizzaRequest == null)
             {
                 return BadRequest();
             }
 
-            var exits = await _pizzaRepository.ExitsAsync(id);
+            var exits = await _pizzaRepository.ExitsAsync(updatePizzaRequest.Id);
 
             if (!exits)
             {
