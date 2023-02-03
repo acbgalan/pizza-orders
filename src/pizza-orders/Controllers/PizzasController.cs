@@ -103,7 +103,29 @@ namespace pizza_orders.Controllers
             return NoContent();
         }
 
+        [HttpDelete("id:int")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeletePizza(int id)
+        {
+            var exits = await _pizzaRepository.ExitsAsync(id);
 
+            if (!exits)
+            {
+                return NotFound("Pizza no encontrada");
+            }
+
+            await _pizzaRepository.DeleteAsync(id);
+            int saveResult = await _pizzaRepository.SaveAsync();
+
+            if (!(saveResult > 0))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al guardar item");
+            }
+
+            return NoContent();
+        }
 
     }
 }
