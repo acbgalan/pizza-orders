@@ -31,5 +31,7 @@ namespace pizza_orders.data.Models
 
         [DisplayName("Disponible")]
         public bool Available { get; set; }
+
+        public List<Ingredient> Ingredients { get; set; }
     }
 }
