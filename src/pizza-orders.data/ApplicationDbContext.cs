@@ -17,6 +17,7 @@ namespace pizza_orders.data
         }
 
         public DbSet<Pizza> Pizzas { get; set; }
+        public DbSet<Ingredient> Ingredients { get; set; }
 
     }
 }
