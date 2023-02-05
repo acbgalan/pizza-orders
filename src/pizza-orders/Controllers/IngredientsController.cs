@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using pizza_orders.data.Models;
 using pizza_orders.data.Repositories.Interfaces;
+using pizza_orders.Requests.Ingredient;
 using pizza_orders.Responses.Ingredient;
 
 namespace pizza_orders.Controllers
@@ -44,6 +46,31 @@ namespace pizza_orders.Controllers
 
             var ingredientResponse = _mapper.Map<IngredientResponse>(ingredient);
             return Ok(ingredientResponse);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateIngredient([FromBody] CreateIngredientRequest createIngredientRequest)
+        {
+            if (createIngredientRequest == null)
+            {
+                return BadRequest();
+            }
+
+            var ingredient = _mapper.Map<Ingredient>(createIngredientRequest);
+            await _ingredientRepository.AddAsync(ingredient);
+            int saveResult = _ingredientRepository.SaveAsync();
+
+            if ((saveResult > 0))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return CreatedAtAction("GetIngredient", new { id = ingredient.Id }, ingredient);
+
+
+
+
+
         }
 
 

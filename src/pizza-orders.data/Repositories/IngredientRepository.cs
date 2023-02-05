@@ -13,7 +13,7 @@ namespace pizza_orders.data.Repositories
     {
         private readonly ApplicationDbContext _context;
 
-        public IngredientRepository(ApplicationDbContext context, )
+        public IngredientRepository(ApplicationDbContext context)
         {
             _context = context;
         }
