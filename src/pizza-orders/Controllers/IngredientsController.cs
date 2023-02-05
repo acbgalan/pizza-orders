@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using pizza_orders.data.Repositories.Interfaces;
+using pizza_orders.Responses.Ingredient;
 
 namespace pizza_orders.Controllers
 {
@@ -17,5 +18,34 @@ namespace pizza_orders.Controllers
             _ingredientRepository = ingredientRepository;
             _mapper = mapper;
         }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<List<IngredientResponse>>> GetAllIngredients()
+        {
+            var ingredients = await _ingredientRepository.GetAllAsync();
+            var ingredientsResponse = _mapper.Map<List<IngredientResponse>>(ingredients);
+
+            return Ok(ingredientsResponse);
+
+        }
+
+        [HttpGet("id:int", Name = "GetIngredient")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IngredientResponse> GetIngredient(int id)
+        {
+            var ingredient = await _ingredientRepository.GetAsync(id);
+
+            if (ingredient == null)
+            {
+                return NotFound();
+            }
+
+            var ingredientResponse = _mapper.Map<IngredientResponse>(ingredient);
+            return Ok(ingredientResponse);
+        }
+
+
     }
 }
