@@ -35,13 +35,13 @@ namespace pizza_orders.Controllers
         [HttpGet("id:int", Name = "GetIngredient")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IngredientResponse> GetIngredient(int id)
+        public async Task<ActionResult<IngredientResponse>> GetIngredient(int id)
         {
             var ingredient = await _ingredientRepository.GetAsync(id);
 
             if (ingredient == null)
             {
-                return NotFound();
+                return NotFound("Ingrediente no encontrado");
             }
 
             var ingredientResponse = _mapper.Map<IngredientResponse>(ingredient);
@@ -49,6 +49,9 @@ namespace pizza_orders.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> CreateIngredient([FromBody] CreateIngredientRequest createIngredientRequest)
         {
             if (createIngredientRequest == null)
@@ -57,21 +60,73 @@ namespace pizza_orders.Controllers
             }
 
             var ingredient = _mapper.Map<Ingredient>(createIngredientRequest);
-            await _ingredientRepository.AddAsync(ingredient);
-            int saveResult = _ingredientRepository.SaveAsync();
 
-            if ((saveResult > 0))
+
+            await _ingredientRepository.AddAsync(ingredient);
+            int saveResult = await _ingredientRepository.SaveAsync();
+
+            if (!(saveResult > 0))
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
             return CreatedAtAction("GetIngredient", new { id = ingredient.Id }, ingredient);
-
-
-
-
-
         }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> UpdateIngredient(UpdateIngredientRequest updateIngredientRequest)
+        {
+            if (updateIngredientRequest == null)
+            {
+                return BadRequest();
+            }
+
+            var exits = await _ingredientRepository.ExitsAsync(updateIngredientRequest.Id);
+
+            if (!exits)
+            {
+                return NotFound("Ingrediente no encontrado");
+            }
+
+            var ingredient = _mapper.Map<Ingredient>(updateIngredientRequest);
+            await _ingredientRepository.UpdateAsync(ingredient);
+            int saveResult = await _ingredientRepository.SaveAsync();
+
+            if (!(saveResult > 0))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al guardar ingrediente");
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeleteIngredient(int id)
+        {
+            var exits = await _ingredientRepository.ExitsAsync(id);
+
+            if (!exits)
+            {
+                return NotFound("Ingrediente no encontrado");
+            }
+
+            await _ingredientRepository.DeleteAsync(id);
+            int saveResult = await _ingredientRepository.SaveAsync();
+
+            if (!(saveResult > 0))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al borrar ingrediente");
+            }
+
+            return NoContent();
+        }
+
 
 
     }

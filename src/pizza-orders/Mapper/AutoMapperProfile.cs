@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using pizza_orders.data.Models;
+using pizza_orders.Requests.Ingredient;
 using pizza_orders.Requests.Pizza;
 using pizza_orders.Responses.Ingredient;
 using pizza_orders.Responses.Pizza;
@@ -11,6 +12,7 @@ namespace pizza_orders.Mapper
         public AutoMapperProfile()
         {
             PizzaMapping();
+            IngredientMapping();
         }
 
         public void PizzaMapping()
@@ -23,6 +25,8 @@ namespace pizza_orders.Mapper
         public void IngredientMapping()
         {
             CreateMap<Ingredient, IngredientResponse>();
+            CreateMap<CreateIngredientRequest, Ingredient>();
+            CreateMap<UpdateIngredientRequest, Ingredient>();            
         }
 
     }
