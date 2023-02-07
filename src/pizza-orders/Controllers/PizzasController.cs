@@ -88,7 +88,7 @@ namespace pizza_orders.Controllers
 
             if (!exits)
             {
-                return NotFound();
+                return NotFound("Pizza no encontrada");
             }
 
             var pizza = _mapper.Map<Pizza>(updatePizzaRequest);
@@ -97,7 +97,7 @@ namespace pizza_orders.Controllers
 
             if (!(saveResult > 0))
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al guardar item");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al guardar pizza");
             }
 
             return NoContent();
@@ -121,7 +121,7 @@ namespace pizza_orders.Controllers
 
             if (!(saveResult > 0))
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al guardar item");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al borrar pizza");
             }
 
             return NoContent();
