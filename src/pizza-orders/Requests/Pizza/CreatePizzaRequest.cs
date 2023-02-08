@@ -19,5 +19,8 @@ namespace pizza_orders.Requests.Pizza
 
         [JsonPropertyName("available")]
         public bool Available { get; set; }
+
+        [JsonPropertyName("ingredientsIds")]
+        public List<int> IngredientsIds { get; set; }
     }
 }

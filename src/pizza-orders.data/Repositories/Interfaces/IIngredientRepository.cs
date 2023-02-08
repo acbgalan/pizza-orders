@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace pizza_orders.data.Repositories.Interfaces
 {
-    public interface IIngredientRepository : IRepositoryAsync<Ingredient>
+    public interface IIngredientRepository : IRepositoryAsync<Ingredient>, IRepository<Ingredient>
     {
+        Task<bool> ExitsAsync(List<int> ids);
+        Task<List<Ingredient>> GetAsync(List<int> ids);
     }
 }

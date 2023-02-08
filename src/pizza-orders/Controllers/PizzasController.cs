@@ -15,11 +15,13 @@ namespace pizza_orders.Controllers
     public class PizzasController : ControllerBase
     {
         private readonly IPizzaRepository _pizzaRepository;
+        private readonly IIngredientRepository _ingredientRepository;
         private readonly IMapper _mapper;
 
-        public PizzasController(IPizzaRepository pizzaRepository, IMapper mapper)
+        public PizzasController(IPizzaRepository pizzaRepository, IIngredientRepository ingredientRepository, IMapper mapper)
         {
             _pizzaRepository = pizzaRepository;
+            _ingredientRepository = ingredientRepository;
             _mapper = mapper;
         }
 
@@ -30,7 +32,7 @@ namespace pizza_orders.Controllers
             var pizzas = await _pizzaRepository.GetAllAsync();
             var pizzasResponses = _mapper.Map<List<PizzaResponse>>(pizzas);
 
-            return Ok(pizzas);
+            return Ok(pizzasResponses);
         }
 
         [HttpGet("id:int", Name = "GetPizza")]
@@ -60,7 +62,20 @@ namespace pizza_orders.Controllers
                 return BadRequest();
             }
 
+            if (await _pizzaRepository.ExitsAsync(createPizzaRequest.Name))
+            {
+                return BadRequest("Ya existe una pizza con ese nombre");
+            }
+
+            bool ingredientsExits = await _ingredientRepository.ExitsAsync(createPizzaRequest.IngredientsIds);
+
+            if (!ingredientsExits)
+            {
+                return BadRequest("No existe uno/s de los ingredientes");
+            }
+
             var pizza = _mapper.Map<Pizza>(createPizzaRequest);
+            pizza.Ingredients = await _ingredientRepository.GetAsync(createPizzaRequest.IngredientsIds);
             await _pizzaRepository.AddAsync(pizza);
             int saveResult = await _pizzaRepository.SaveAsync();
 
@@ -69,7 +84,9 @@ namespace pizza_orders.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al guardar item");
             }
 
-            return CreatedAtRoute("GetPizza", new { id = pizza.Id }, pizza);
+            var pizzaResponse = _mapper.Map<PizzaResponse>(pizza);
+
+            return CreatedAtRoute("GetPizza", new { id = pizza.Id }, pizzaResponse);
         }
 
         [HttpPut]

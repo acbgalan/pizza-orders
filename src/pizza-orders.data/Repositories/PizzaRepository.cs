@@ -25,12 +25,12 @@ namespace pizza_orders.data.Repositories
 
         public async Task<List<Pizza>> GetAllAsync()
         {
-            return await _context.Pizzas.ToListAsync();
+            return await _context.Pizzas.Include(x => x.Ingredients).ToListAsync();
         }
 
         public async Task<Pizza> GetAsync(int id)
         {
-            return await _context.Pizzas.FindAsync(id);
+            return await _context.Pizzas.Include(x => x.Ingredients).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task UpdateAsync(Pizza entity)
@@ -62,6 +62,11 @@ namespace pizza_orders.data.Repositories
         public async Task<bool> ExitsAsync(int id)
         {
             return await _context.Pizzas.AnyAsync(x => x.Id == id);
+        }
+
+        public async Task<bool> ExitsAsync(string name)
+        {
+            return await _context.Pizzas.AnyAsync(x => x.Name == name);
         }
 
         public async Task<int> SaveAsync()
