@@ -30,7 +30,7 @@ namespace pizza_orders.Controllers
             var pizzas = await _pizzaRepository.GetAllAsync();
             var pizzasResponses = _mapper.Map<List<PizzaResponse>>(pizzas);
 
-            return Ok(pizzas);
+            return Ok(pizzasResponses);
         }
 
         [HttpGet("id:int", Name = "GetPizza")]
