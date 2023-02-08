@@ -62,6 +62,11 @@ namespace pizza_orders.Controllers
                 return BadRequest();
             }
 
+            if (await _pizzaRepository.ExitsAsync(createPizzaRequest.Name))
+            {
+                return BadRequest("Ya existe una pizza con ese nombre");
+            }
+
             bool ingredientsExits = await _ingredientRepository.ExitsAsync(createPizzaRequest.IngredientsIds);
 
             if (!ingredientsExits)
@@ -80,7 +85,6 @@ namespace pizza_orders.Controllers
             }
 
             var pizzaResponse = _mapper.Map<PizzaResponse>(pizza);
-
 
             return CreatedAtRoute("GetPizza", new { id = pizza.Id }, pizzaResponse);
         }
