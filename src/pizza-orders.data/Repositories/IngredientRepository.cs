@@ -4,6 +4,7 @@ using pizza_orders.data.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ namespace pizza_orders.data.Repositories
     {
         private readonly ApplicationDbContext _context;
 
+        #region Async
         public IngredientRepository(ApplicationDbContext context)
         {
             _context = context;
@@ -68,6 +70,62 @@ namespace pizza_orders.data.Repositories
         {
             return await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> ExitsAsync(List<int> ids)
+        {
+            var ingredientIds = await _context.Ingredients.Where(x => ids.Contains(x.Id)).Select(x => x.Id).ToListAsync();
+            return ingredientIds.Count != ids.Count ? false : true;
+        }
+
+        #endregion
+
+        #region Sync
+        public void Add(Ingredient entity)
+        {
+            _context.Ingredients.Add(entity);
+        }
+
+        public List<Ingredient> GetAll()
+        {
+            return _context.Ingredients.ToList();
+        }
+
+        public Ingredient Get(int id)
+        {
+            return _context.Ingredients.Find(id);
+        }
+
+        public void Update(Ingredient entity)
+        {
+            _context.Entry<Ingredient>(entity).State = EntityState.Modified;
+        }
+
+        public void Delete(int id)
+        {
+            var ingredient = this.Get(id);
+
+            if (ingredient != null)
+            {
+                _context.Entry<Ingredient>(ingredient).State entityState = EntityState.Deleted;
+            }
+        }
+
+        public void Delete(Ingredient entity)
+        {
+            _context.Entry<Ingredient>(entity).State = EntityState.Deleted;
+        }
+
+        public bool Exits(int id)
+        {
+            return _context.Ingredients.Any(x => x.Id == id);
+        }
+
+        public int Save()
+        {
+            return _context.SaveChanges();
+        }
+
+        #endregion
 
     }
 }
