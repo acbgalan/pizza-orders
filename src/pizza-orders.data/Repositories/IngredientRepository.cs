@@ -77,6 +77,11 @@ namespace pizza_orders.data.Repositories
             return ingredientIds.Count != ids.Count ? false : true;
         }
 
+        public async Task<List<Ingredient>> GetAsync(List<int> ids)
+        {
+            return await _context.Ingredients.Where(x => ids.Contains(x.Id)).ToListAsync();
+        }
+
         #endregion
 
         #region Sync
@@ -106,7 +111,7 @@ namespace pizza_orders.data.Repositories
 
             if (ingredient != null)
             {
-                _context.Entry<Ingredient>(ingredient).State entityState = EntityState.Deleted;
+                _context.Entry<Ingredient>(ingredient).State = EntityState.Deleted;
             }
         }
 
@@ -124,7 +129,6 @@ namespace pizza_orders.data.Repositories
         {
             return _context.SaveChanges();
         }
-
         #endregion
 
     }
