@@ -15,11 +15,13 @@ namespace pizza_orders.Controllers
     public class PizzasController : ControllerBase
     {
         private readonly IPizzaRepository _pizzaRepository;
+        private readonly IIngredientRepository _ingredientRepository;
         private readonly IMapper _mapper;
 
-        public PizzasController(IPizzaRepository pizzaRepository, IMapper mapper)
+        public PizzasController(IPizzaRepository pizzaRepository, IIngredientRepository ingredientRepository, IMapper mapper)
         {
             _pizzaRepository = pizzaRepository;
+            _ingredientRepository = ingredientRepository;
             _mapper = mapper;
         }
 
@@ -60,7 +62,15 @@ namespace pizza_orders.Controllers
                 return BadRequest();
             }
 
+            bool ingredientsExits = await _ingredientRepository.ExitsAsync(createPizzaRequest.IngredientsIds);
+
+            if (!ingredientsExits)
+            {
+                return BadRequest("No existe uno/s de los ingredientes");
+            }
+
             var pizza = _mapper.Map<Pizza>(createPizzaRequest);
+            pizza.Ingredients = await _ingredientRepository.GetAsync(createPizzaRequest.IngredientsIds);
             await _pizzaRepository.AddAsync(pizza);
             int saveResult = await _pizzaRepository.SaveAsync();
 

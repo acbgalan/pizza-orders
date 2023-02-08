@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using pizza_orders.data.Models;
+using pizza_orders.data.Repositories.Interfaces;
 using pizza_orders.Requests.Ingredient;
 using pizza_orders.Requests.Pizza;
 using pizza_orders.Responses.Ingredient;
@@ -21,6 +22,9 @@ namespace pizza_orders.Mapper
                 .ForMember(pizzaResponse => pizzaResponse.Ingredients, options => options.MapFrom(MapPizzaResponse));
 
             CreateMap<CreatePizzaRequest, Pizza>();
+            //.ForMember(pizza => pizza.Ingredients, options => options.MapFrom(MapPizzaIngredients));
+            //TODO: Si la relación de Pizza e ingredientes fuese con tabla intermedia manual podria funcionar el.. video 57 udemy
+
             CreateMap<UpdatePizzaRequest, Pizza>();
         }
 
@@ -29,8 +33,9 @@ namespace pizza_orders.Mapper
             CreateMap<Ingredient, IngredientResponse>();
             CreateMap<CreateIngredientRequest, Ingredient>();
             CreateMap<UpdateIngredientRequest, Ingredient>();
-        }
 
+            CreateMap<int, Ingredient>();
+        }
 
         private List<string> MapPizzaResponse(Pizza pizza, PizzaResponse pizzaResponse)
         {
@@ -44,6 +49,25 @@ namespace pizza_orders.Mapper
             foreach (var item in pizza.Ingredients)
             {
                 result.Add(item.Name);
+            }
+
+            return result;
+        }
+
+        //No se esta utilizando.. ver notas CreateMap<CreatePizzaRequest, Pizza>();
+        private List<Ingredient> MapPizzaIngredients(CreatePizzaRequest createPizzaRequest, Pizza pizza)
+        {
+            var result = new List<Ingredient>();
+
+            if (createPizzaRequest.IngredientsIds == null)
+            {
+                return result;
+            }
+
+            foreach (var item in createPizzaRequest.IngredientsIds)
+            {
+                //result.Add(_ingredientRepository.Get(item));
+                result.Add(new Ingredient() { Id = item });
             }
 
             return result;
