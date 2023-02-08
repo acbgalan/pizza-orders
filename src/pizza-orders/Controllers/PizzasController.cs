@@ -79,7 +79,10 @@ namespace pizza_orders.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al guardar item");
             }
 
-            return CreatedAtRoute("GetPizza", new { id = pizza.Id }, pizza);
+            var pizzaResponse = _mapper.Map<PizzaResponse>(pizza);
+
+
+            return CreatedAtRoute("GetPizza", new { id = pizza.Id }, pizzaResponse);
         }
 
         [HttpPut]
