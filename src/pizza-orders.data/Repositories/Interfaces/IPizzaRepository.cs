@@ -10,5 +10,6 @@ namespace pizza_orders.data.Repositories.Interfaces
 {
     public interface IPizzaRepository : IRepositoryAsync<Pizza>
     {
+        Task<bool> ExitsAsync(string name);
     }
 }

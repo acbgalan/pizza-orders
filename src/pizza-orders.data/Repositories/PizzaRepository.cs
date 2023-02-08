@@ -64,6 +64,11 @@ namespace pizza_orders.data.Repositories
             return await _context.Pizzas.AnyAsync(x => x.Id == id);
         }
 
+        public async Task<bool> ExitsAsync(string name)
+        {
+            return await _context.Pizzas.AnyAsync(x => x.Name == name);
+        }
+
         public async Task<int> SaveAsync()
         {
             return await _context.SaveChangesAsync();
