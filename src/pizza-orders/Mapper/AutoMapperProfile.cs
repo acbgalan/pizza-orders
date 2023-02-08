@@ -17,7 +17,9 @@ namespace pizza_orders.Mapper
 
         public void PizzaMapping()
         {
-            CreateMap<Pizza, PizzaResponse>();
+            CreateMap<Pizza, PizzaResponse>()
+                .ForMember(pizzaResponse => pizzaResponse.Ingredients, options => options.MapFrom(MapPizzaResponse));
+
             CreateMap<CreatePizzaRequest, Pizza>();
             CreateMap<UpdatePizzaRequest, Pizza>();
         }
@@ -26,7 +28,25 @@ namespace pizza_orders.Mapper
         {
             CreateMap<Ingredient, IngredientResponse>();
             CreateMap<CreateIngredientRequest, Ingredient>();
-            CreateMap<UpdateIngredientRequest, Ingredient>();            
+            CreateMap<UpdateIngredientRequest, Ingredient>();
+        }
+
+
+        private List<string> MapPizzaResponse(Pizza pizza, PizzaResponse pizzaResponse)
+        {
+            var result = new List<string>();
+
+            if (pizza.Ingredients == null)
+            {
+                return result;
+            }
+
+            foreach (var item in pizza.Ingredients)
+            {
+                result.Add(item.Name);
+            }
+
+            return result;
         }
 
     }

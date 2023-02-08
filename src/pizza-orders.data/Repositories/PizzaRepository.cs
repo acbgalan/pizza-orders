@@ -25,12 +25,12 @@ namespace pizza_orders.data.Repositories
 
         public async Task<List<Pizza>> GetAllAsync()
         {
-            return await _context.Pizzas.ToListAsync();
+            return await _context.Pizzas.Include(x => x.Ingredients).ToListAsync();
         }
 
         public async Task<Pizza> GetAsync(int id)
         {
-            return await _context.Pizzas.FindAsync(id);
+            return await _context.Pizzas.Include(x => x.Ingredients).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task UpdateAsync(Pizza entity)

@@ -18,5 +18,8 @@ namespace pizza_orders.Responses.Pizza
 
         [JsonPropertyName("available")]
         public bool Available { get; set; }
+
+        [JsonPropertyName("ingredients")]
+        public List<string> Ingredients { get; set; }
     }
 }
