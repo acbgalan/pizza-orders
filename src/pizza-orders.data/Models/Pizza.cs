@@ -16,17 +16,17 @@ namespace pizza_orders.data.Models
     {
         public int Id { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "El campo {0} es requerido")]
-        [StringLength(50, ErrorMessage = "Se esperaba una cadena de texto en el campo {0} con un máximo de {1} caracteres")]
         [DisplayName("Nombre")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "El campo {0} es requerido")]
+        [StringLength(50, ErrorMessage = "Se esperaba una cadena de texto con un máximo de {1} caracteres")]        
         public string Name { get; set; }
 
-        [StringLength(250, ErrorMessage = "Se esperaba una cadena de texto en el campo {0} con un máximo de {1} caracteres")]
         [DisplayName("Descripción")]
+        [StringLength(250, ErrorMessage = "Se esperaba una cadena de texto con un máximo de {1} caracteres")]
         public string Description { get; set; }
 
-        [Precision(9, 2)]
         [DisplayName("Precio")]
+        [Precision(9, 2)]        
         public decimal Prize { get; set; }
 
         [DisplayName("Disponible")]
