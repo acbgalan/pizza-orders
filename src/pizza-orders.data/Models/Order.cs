@@ -23,8 +23,8 @@ namespace pizza_orders.data.Models
         [DisplayName("Método de pago")]
         public PaymentMethod PaymentMethod { get; set; }
 
-        [Precision(9, 2)]
         [DisplayName("Precio")]
+        [Precision(9, 2)]        
         public decimal Prize { get; set; }
 
         [ForeignKey("Client")]
