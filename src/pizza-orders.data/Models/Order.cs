@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace pizza_orders.data.Models
 {
     public enum PaymentMethod { Cash, Card, Prepaid }
+    public enum State { Cancelled = -1, Done = 1, Preparation = 2, Ready = 3, Delivered = 4 }
 
     [Table("Orders")]
     public class Order
@@ -24,11 +25,14 @@ namespace pizza_orders.data.Models
         public PaymentMethod PaymentMethod { get; set; }
 
         [DisplayName("Precio")]
-        [Precision(9, 2)]        
+        [Precision(9, 2)]
         public decimal Prize { get; set; }
 
         [ForeignKey("Client")]
         public int ClientId { get; set; }
+
+        [DisplayName("Estado")]
+        public State State { get; set; }
 
         public Client Client { get; set; }
     }
