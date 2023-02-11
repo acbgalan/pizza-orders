@@ -35,5 +35,6 @@ namespace pizza_orders.data.Models
         public State State { get; set; }
 
         public Client Client { get; set; }
+        public List<OrderDetail> OrderDetails { get; set; }
     }
 }

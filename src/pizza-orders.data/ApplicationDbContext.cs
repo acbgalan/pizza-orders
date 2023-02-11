@@ -21,5 +21,13 @@ namespace pizza_orders.data
         public DbSet<Client> Clients { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<OrderDetail>().HasKey(prop => new { prop.OrderId, prop.PizzaId });
+
+        }
     }
 }

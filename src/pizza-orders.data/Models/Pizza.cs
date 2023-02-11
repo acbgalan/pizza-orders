@@ -18,7 +18,7 @@ namespace pizza_orders.data.Models
 
         [DisplayName("Nombre")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "El campo {0} es requerido")]
-        [StringLength(50, ErrorMessage = "Se esperaba una cadena de texto con un máximo de {1} caracteres")]        
+        [StringLength(50, ErrorMessage = "Se esperaba una cadena de texto con un máximo de {1} caracteres")]
         public string Name { get; set; }
 
         [DisplayName("Descripción")]
@@ -26,12 +26,13 @@ namespace pizza_orders.data.Models
         public string Description { get; set; }
 
         [DisplayName("Precio")]
-        [Precision(9, 2)]        
+        [Precision(9, 2)]
         public decimal Prize { get; set; }
 
         [DisplayName("Disponible")]
         public bool Available { get; set; }
 
         public List<Ingredient> Ingredients { get; set; }
+        public List<OrderDetail> OrderDetails { get; set; }
     }
 }
