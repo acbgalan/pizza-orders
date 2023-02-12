@@ -9,5 +9,6 @@ namespace pizza_orders.data.Repositories.Interfaces
 {
     public interface IClientRepository : IRepositoryAsync<Client>
     {
+        Task<bool> ExitsAsync(string email);
     }
 }
