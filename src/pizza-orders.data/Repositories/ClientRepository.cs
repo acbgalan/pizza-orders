@@ -65,6 +65,11 @@ namespace pizza_orders.data.Repositories
 
         }
 
+        public async Task<bool> ExitsAsync(string email)
+        {
+            return await _context.Clients.AnyAsync(x => x.Email == email);
+        }
+
         public async Task<int> SaveAsync()
         {
             return await _context.SaveChangesAsync();

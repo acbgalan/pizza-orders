@@ -54,8 +54,12 @@ namespace pizza_orders.Controllers
                 return BadRequest();
             }
 
-            var client = _mapper.Map<Client>(createClientRequest);
+            if (await _clientRepository.ExitsAsync(createClientRequest.Email))
+            {
+                return BadRequest("Ya existe un cliente con ese email");
+            }
 
+            var client = _mapper.Map<Client>(createClientRequest);
             await _clientRepository.AddAsync(client);
             int saveResult = await _clientRepository.SaveAsync();
 
@@ -68,8 +72,6 @@ namespace pizza_orders.Controllers
 
             return CreatedAtAction("GetClient", new { id = client.Id }, clientResponse);
         }
-
-
 
 
     }
