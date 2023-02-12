@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using pizza_orders.data.Models;
 using pizza_orders.data.Repositories.Interfaces;
+using pizza_orders.Requests.Client;
 using pizza_orders.Responses.Client;
 
 namespace pizza_orders.Controllers
@@ -43,6 +44,29 @@ namespace pizza_orders.Controllers
             }
 
             return Ok(client);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateClient([FromBody] CreateClientRequest createClientRequest)
+        {
+            if (createClientRequest == null)
+            {
+                return BadRequest();
+            }
+
+            var client = _mapper.Map<Client>(createClientRequest);
+
+            await _clientRepository.AddAsync(client);
+            int saveResult = await _clientRepository.SaveAsync();
+
+            if (!(saveResult > 0))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al guardar client");
+            }
+
+            var clientResponse = _mapper.Map<ClientResponse>(client);
+
+            return CreatedAtAction("GetClient", new { id = client.Id }, clientResponse);
         }
 
 

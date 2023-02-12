@@ -81,7 +81,7 @@ namespace pizza_orders.Controllers
 
             if (!(saveResult > 0))
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al guardar item");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al guardar pizza");
             }
 
             var pizzaResponse = _mapper.Map<PizzaResponse>(pizza);
