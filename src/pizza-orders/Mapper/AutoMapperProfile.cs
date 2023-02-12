@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using pizza_orders.data.Models;
 using pizza_orders.data.Repositories.Interfaces;
+using pizza_orders.Requests.Client;
 using pizza_orders.Requests.Ingredient;
 using pizza_orders.Requests.Pizza;
+using pizza_orders.Responses.Client;
 using pizza_orders.Responses.Ingredient;
 using pizza_orders.Responses.Pizza;
 
@@ -14,6 +16,7 @@ namespace pizza_orders.Mapper
         {
             PizzaMapping();
             IngredientMapping();
+            ClientMapping();
         }
 
         public void PizzaMapping()
@@ -35,6 +38,12 @@ namespace pizza_orders.Mapper
             CreateMap<UpdateIngredientRequest, Ingredient>();
 
             CreateMap<int, Ingredient>();
+        }
+
+        private void ClientMapping()
+        {
+            CreateMap<Client, ClientResponse>();
+            CreateMap<CreateClientRequest, Client>();
         }
 
         private List<string> MapPizzaResponse(Pizza pizza, PizzaResponse pizzaResponse)
