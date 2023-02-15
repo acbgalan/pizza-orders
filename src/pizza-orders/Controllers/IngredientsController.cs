@@ -97,7 +97,7 @@ namespace pizza_orders.Controllers
 
             if (!(saveResult > 0))
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al guardar ingrediente");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al actualizar ingrediente");
             }
 
             return NoContent();

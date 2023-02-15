@@ -73,6 +73,32 @@ namespace pizza_orders.Controllers
             return CreatedAtAction("GetClient", new { id = client.Id }, clientResponse);
         }
 
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> UpdateClient(UpdateClientRequest updateClientRequest)
+        {
+            if (updateClientRequest == null)
+            {
+                return BadRequest();
+            }
+
+            var exits = await _clientRepository.ExitsAsync(updateClientRequest.Id);
+
+            var client = _mapper.Map<Client>(updateClientRequest);
+            await _clientRepository.UpdateAsync(client);
+            int saveResult = await _clientRepository.SaveAsync();
+
+            if (!(saveResult > 0))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al actualizar cliente");
+            }
+
+            return NoContent();
+        }
+
+
 
         [HttpDelete("id:int")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
