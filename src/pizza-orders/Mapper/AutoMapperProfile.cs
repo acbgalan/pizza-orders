@@ -6,6 +6,7 @@ using pizza_orders.Requests.Ingredient;
 using pizza_orders.Requests.Pizza;
 using pizza_orders.Responses.Client;
 using pizza_orders.Responses.Ingredient;
+using pizza_orders.Responses.Orders;
 using pizza_orders.Responses.Pizza;
 
 namespace pizza_orders.Mapper
@@ -17,6 +18,12 @@ namespace pizza_orders.Mapper
             PizzaMapping();
             IngredientMapping();
             ClientMapping();
+            OrderMapping();
+        }
+
+        private void OrderMapping()
+        {
+            CreateMap<Order, OrderResponse>();
         }
 
         public void PizzaMapping()
