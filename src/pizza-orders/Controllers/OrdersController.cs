@@ -29,6 +29,15 @@ namespace pizza_orders.Controllers
             return Ok(ordersResponse);
         }
 
+        //Create
+        //PaymentMethod
+        //ClientId
+        //Details
+        //[PizzaId, Quantity]
+        //
+        //
+
+
 
     }
 }
