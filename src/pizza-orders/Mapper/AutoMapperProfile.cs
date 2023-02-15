@@ -44,6 +44,7 @@ namespace pizza_orders.Mapper
         {
             CreateMap<Client, ClientResponse>();
             CreateMap<CreateClientRequest, Client>();
+            CreateMap<UpdateClientRequest, Client>();
         }
 
         private List<string> MapPizzaResponse(Pizza pizza, PizzaResponse pizzaResponse)
