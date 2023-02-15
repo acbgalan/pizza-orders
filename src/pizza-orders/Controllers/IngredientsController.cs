@@ -103,7 +103,7 @@ namespace pizza_orders.Controllers
             return NoContent();
         }
 
-        [HttpDelete]
+        [HttpDelete("id:int")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -121,13 +121,11 @@ namespace pizza_orders.Controllers
 
             if (!(saveResult > 0))
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al borrar ingrediente");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Valor no esperado al borrar ingrediente {id}");
             }
 
             return NoContent();
         }
-
-
 
     }
 }
