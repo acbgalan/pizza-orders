@@ -74,5 +74,30 @@ namespace pizza_orders.Controllers
         }
 
 
+        [HttpDelete("id:int")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeleteClient(int id)
+        {
+            var exits = await _clientRepository.ExitsAsync(id);
+
+            if (!exits)
+            {
+                return NotFound("Cliente no encontrado");
+            }
+
+            await _clientRepository.DeleteAsync(id);
+            int saveResult = await _clientRepository.SaveAsync();
+
+            if (!(saveResult > 0))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Valor no esperado al borrar cliente {id}");
+            }
+
+            return NoContent();
+        }
+
+
     }
 }
