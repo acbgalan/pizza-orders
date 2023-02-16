@@ -40,7 +40,18 @@ namespace pizza_orders.Controllers
                 return BadRequest("No existe el cliente especificado");
             }
 
+
+            bool exitsPayment = PaymentMethod.IsDefined<PaymentMethod>(createOrderRequest.PaymentMethod);
+
+            if (!exitsPayment)
+            {
+                return BadRequest("No existe el método de pago especificado");
+            }
+
             var order = _mapper.Map<Order>(createOrderRequest);
+            order.Date = DateTime.Now;
+            order.State = State.Done;
+
             await _orderRepository.AddAsync(order);
             int saveResult = await _orderRepository.SaveAsync();
 
