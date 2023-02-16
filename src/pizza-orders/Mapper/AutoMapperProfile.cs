@@ -3,6 +3,7 @@ using pizza_orders.data.Models;
 using pizza_orders.data.Repositories.Interfaces;
 using pizza_orders.Requests.Client;
 using pizza_orders.Requests.Ingredient;
+using pizza_orders.Requests.Orders;
 using pizza_orders.Requests.Pizza;
 using pizza_orders.Responses.Client;
 using pizza_orders.Responses.Ingredient;
@@ -24,6 +25,7 @@ namespace pizza_orders.Mapper
         private void OrderMapping()
         {
             CreateMap<Order, OrderResponse>();
+            CreateMap<CreateOrderRequest, Order>();
         }
 
         public void PizzaMapping()
