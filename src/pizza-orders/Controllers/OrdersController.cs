@@ -14,12 +14,14 @@ namespace pizza_orders.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IOrderDetailRepository _orderDetailRepository;
         private readonly IClientRepository _clientRepository;
         private readonly IMapper _mapper;
 
-        public OrdersController(IOrderRepository orderRepository, IClientRepository clientRepository, IMapper mapper)
+        public OrdersController(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IClientRepository clientRepository, IMapper mapper)
         {
             _orderRepository = orderRepository;
+            _orderDetailRepository = orderDetailRepository;
             _clientRepository = clientRepository;
             _mapper = mapper;
         }
@@ -40,7 +42,20 @@ namespace pizza_orders.Controllers
                 return BadRequest("No existe el cliente especificado");
             }
 
+
+            bool exitsPayment = PaymentMethod.IsDefined<PaymentMethod>(createOrderRequest.PaymentMethod);
+
+            if (!exitsPayment)
+            {
+                return BadRequest("No existe el método de pago especificado");
+            }
+
             var order = _mapper.Map<Order>(createOrderRequest);
+            order.Date = DateTime.Now;
+            order.State = State.Done;
+            await _orderDetailRepository.FillPrices(order.OrderDetails);
+            order.Prize = order.OrderDetails.Sum(x => x.Amount);
+
             await _orderRepository.AddAsync(order);
             int saveResult = await _orderRepository.SaveAsync();
 
@@ -62,16 +77,6 @@ namespace pizza_orders.Controllers
 
             return Ok(ordersResponse);
         }
-
-        //Create
-        //PaymentMethod
-        //ClientId
-        //Details
-        //[PizzaId, Quantity]
-        //
-        //
-
-
 
     }
 }

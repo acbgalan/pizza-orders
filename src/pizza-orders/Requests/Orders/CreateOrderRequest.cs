@@ -6,5 +6,6 @@ namespace pizza_orders.Requests.Orders
     {
         public int ClientId { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
+        public List<CreateOrderRequestDetail> Details { get; set; }
     }
 }

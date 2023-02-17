@@ -22,12 +22,7 @@ namespace pizza_orders.Mapper
             OrderMapping();
         }
 
-        private void OrderMapping()
-        {
-            CreateMap<Order, OrderResponse>();
-            CreateMap<CreateOrderRequest, Order>();
-        }
-
+        #region Mappings
         public void PizzaMapping()
         {
             CreateMap<Pizza, PizzaResponse>()
@@ -56,6 +51,17 @@ namespace pizza_orders.Mapper
             CreateMap<UpdateClientRequest, Client>();
         }
 
+        private void OrderMapping()
+        {
+            CreateMap<Order, OrderResponse>();
+            CreateMap<CreateOrderRequest, Order>()
+                .ForMember(order => order.OrderDetails, options => options.MapFrom(Order_OrderDetails));
+        }
+
+        #endregion
+
+
+        #region MyRegion
         private List<string> MapPizzaResponse(Pizza pizza, PizzaResponse pizzaResponse)
         {
             var result = new List<string>();
@@ -91,6 +97,25 @@ namespace pizza_orders.Mapper
 
             return result;
         }
+
+        private List<OrderDetail> Order_OrderDetails(CreateOrderRequest createOrderRequest, Order order)
+        {
+            var result = new List<OrderDetail>();
+
+            if (createOrderRequest.Details == null)
+            {
+                return result;
+            }
+
+            foreach (var item in createOrderRequest.Details)
+            {
+                result.Add(new OrderDetail() { PizzaId = item.PizzaId, Quantity = item.Quantity });
+            }
+
+            return result;
+        }
+
+        #endregion
 
     }
 }
