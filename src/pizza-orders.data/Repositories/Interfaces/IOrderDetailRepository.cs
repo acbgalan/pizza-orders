@@ -9,6 +9,6 @@ namespace pizza_orders.data.Repositories.Interfaces
 {
     public interface IOrderDetailRepository : IRepositoryAsync<OrderDetail>
     {
-
+        Task<List<OrderDetail>> FillPrices(List<OrderDetail> orderDetails);
     }
 }

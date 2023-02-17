@@ -70,5 +70,22 @@ namespace pizza_orders.data.Repositories
             return await _context.SaveChangesAsync();
         }
 
+        public async Task<List<OrderDetail>> FillPrices(List<OrderDetail> orderDetails)
+        {
+            foreach (var item in orderDetails)
+            {
+                decimal pizzaPrize = await (from p in _context.Pizzas
+                                            where p.Id == item.PizzaId && p.Available == true
+                                            select p.Prize).FirstOrDefaultAsync();
+
+                if (pizzaPrize != 0)
+                {
+                    item.UnitPrice = pizzaPrize;
+                    item.Amount = pizzaPrize * item.Quantity;
+                }
+            }
+
+            return orderDetails;
+        }
     }
 }
