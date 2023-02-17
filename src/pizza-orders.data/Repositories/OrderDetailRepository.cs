@@ -80,7 +80,7 @@ namespace pizza_orders.data.Repositories
 
                 if (pizzaPrize != 0)
                 {
-                    item.UnitPrice = pizzaPrize;
+                    item.UnitPrize = pizzaPrize;
                     item.Amount = pizzaPrize * item.Quantity;
                 }
             }
