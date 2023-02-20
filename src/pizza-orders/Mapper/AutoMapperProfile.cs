@@ -26,7 +26,7 @@ namespace pizza_orders.Mapper
         public void PizzaMapping()
         {
             CreateMap<Pizza, PizzaResponse>()
-                .ForMember(pizzaResponse => pizzaResponse.Ingredients, options => options.MapFrom(MapPizzaResponse));
+                .ForMember(d => d.Ingredients, o => o.MapFrom(MapPizzaResponse));
 
             CreateMap<CreatePizzaRequest, Pizza>();
             //.ForMember(pizza => pizza.Ingredients, options => options.MapFrom(MapPizzaIngredients));
@@ -59,17 +59,14 @@ namespace pizza_orders.Mapper
                 .ForMember(d => d.Phone, o => o.MapFrom(s => s.Client.Phone))
                 .ForMember(d => d.Email, o => o.MapFrom(s => s.Client.Email));
 
-
-
-
             CreateMap<CreateOrderRequest, Order>()
-                .ForMember(order => order.OrderDetails, options => options.MapFrom(Order_OrderDetails));
+                .ForMember(d => d.OrderDetails, o => o.MapFrom(Order_OrderDetails));
         }
 
         #endregion
 
 
-        #region MyRegion
+        #region MapMethods
         private List<string> MapPizzaResponse(Pizza pizza, PizzaResponse pizzaResponse)
         {
             var result = new List<string>();
@@ -87,7 +84,6 @@ namespace pizza_orders.Mapper
             return result;
         }
 
-        //No se esta utilizando.. ver notas CreateMap<CreatePizzaRequest, Pizza>();
         private List<Ingredient> MapPizzaIngredients(CreatePizzaRequest createPizzaRequest, Pizza pizza)
         {
             var result = new List<Ingredient>();
