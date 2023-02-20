@@ -25,12 +25,20 @@ namespace pizza_orders.data.Repositories
 
         public async Task<List<Order>> GetAllAsync()
         {
-            return await _context.Orders.Include(x => x.OrderDetails).ToListAsync();
+            return await _context.Orders
+                .Include(x => x.Client)
+                .Include(x => x.OrderDetails)
+                .ThenInclude(x => x.Pizza)
+                .ToListAsync();
         }
 
         public async Task<Order> GetAsync(int id)
         {
-            return await _context.Orders.Include(x => x.OrderDetails).FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Orders
+                .Include(x => x.Client)
+                .Include(x => x.OrderDetails)
+                .ThenInclude(x => x.Pizza)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task UpdateAsync(Order entity)

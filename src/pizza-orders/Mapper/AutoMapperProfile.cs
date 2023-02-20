@@ -26,7 +26,7 @@ namespace pizza_orders.Mapper
         public void PizzaMapping()
         {
             CreateMap<Pizza, PizzaResponse>()
-                .ForMember(pizzaResponse => pizzaResponse.Ingredients, options => options.MapFrom(MapPizzaResponse));
+                .ForMember(d => d.Ingredients, o => o.MapFrom(MapPizzaResponse));
 
             CreateMap<CreatePizzaRequest, Pizza>();
             //.ForMember(pizza => pizza.Ingredients, options => options.MapFrom(MapPizzaIngredients));
@@ -53,15 +53,21 @@ namespace pizza_orders.Mapper
 
         private void OrderMapping()
         {
-            CreateMap<Order, OrderResponse>();
+            CreateMap<Order, OrderResponse>()
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Client.Name))
+                .ForMember(d => d.Address, o => o.MapFrom(s => s.Client.Address))
+                .ForMember(d => d.Phone, o => o.MapFrom(s => s.Client.Phone))
+                .ForMember(d => d.Email, o => o.MapFrom(s => s.Client.Email))
+                .ForMember(d => d.Details, o => o.MapFrom(MapOrderResponseDetails));
+
             CreateMap<CreateOrderRequest, Order>()
-                .ForMember(order => order.OrderDetails, options => options.MapFrom(Order_OrderDetails));
+                .ForMember(d => d.OrderDetails, o => o.MapFrom(Order_OrderDetails));
         }
 
         #endregion
 
 
-        #region MyRegion
+        #region MapMethods
         private List<string> MapPizzaResponse(Pizza pizza, PizzaResponse pizzaResponse)
         {
             var result = new List<string>();
@@ -79,7 +85,6 @@ namespace pizza_orders.Mapper
             return result;
         }
 
-        //No se esta utilizando.. ver notas CreateMap<CreatePizzaRequest, Pizza>();
         private List<Ingredient> MapPizzaIngredients(CreatePizzaRequest createPizzaRequest, Pizza pizza)
         {
             var result = new List<Ingredient>();
@@ -110,6 +115,31 @@ namespace pizza_orders.Mapper
             foreach (var item in createOrderRequest.Details)
             {
                 result.Add(new OrderDetail() { PizzaId = item.PizzaId, Quantity = item.Quantity });
+            }
+
+            return result;
+        }
+
+        public List<OrderResponseDetail> MapOrderResponseDetails(Order order, OrderResponse orderResponse)
+        {
+            var result = new List<OrderResponseDetail>();
+
+            if (order.OrderDetails == null)
+            {
+                return result;
+            }
+
+            foreach (var item in order.OrderDetails)
+            {
+                result.Add(new OrderResponseDetail()
+                {
+                    PizzaId = item.PizzaId,
+                    Product = item.Pizza.Name,
+                    Quantity = item.Quantity,
+                    UnitPrize = item.UnitPrize,
+                    Discount = item.Discount,
+                    Amount = item.Amount
+                });
             }
 
             return result;
