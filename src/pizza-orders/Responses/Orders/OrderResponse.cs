@@ -15,20 +15,28 @@ namespace pizza_orders.Responses.Orders
         [JsonPropertyName("date")]
         public DateTime Date { get; set; }
 
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("address")]
+        public string Address { get; set; }
+
+        [JsonPropertyName("Phone")]
+        public string Phone { get; set; }
+
+        [JsonPropertyName("email")]
+        public string Email { get; set; }
+
         [JsonPropertyName("paymentmethod")]
-        [DisplayName("Método de pago")]
-        public PaymentMethod PaymentMethod { get; set; }
+        public string PaymentMethod { get; set; }
 
         [JsonPropertyName("prize")]
         public decimal Prize { get; set; }
 
-        [JsonPropertyName("clientid")]
-        public int ClientId { get; set; }
-
         [JsonPropertyName("state")]
-        public State State { get; set; }
+        public string State { get; set; }
 
-        public List<OrderDetailResponse> OrderDetails { get; set; }
+        //public List<OrderDetailResponse> OrderDetails { get; set; }
 
 
     }
