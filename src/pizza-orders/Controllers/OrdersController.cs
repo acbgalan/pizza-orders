@@ -68,6 +68,23 @@ namespace pizza_orders.Controllers
         }
 
 
+        [HttpGet("id:int", Name = "GetOrder")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<OrderResponse>> GetOrder(int id)
+        {
+            var order = await _orderRepository.GetAsync(id);
+
+            if (order == null)
+            {
+                return NotFound("Pedido no encontrado");
+            }
+
+            var orderResponse = _mapper.Map<OrderResponse>(order);
+            return Ok(orderResponse);
+        }
+
+
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<OrderResponse>>> GetAllOrders()

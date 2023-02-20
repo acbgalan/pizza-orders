@@ -57,7 +57,8 @@ namespace pizza_orders.Mapper
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Client.Name))
                 .ForMember(d => d.Address, o => o.MapFrom(s => s.Client.Address))
                 .ForMember(d => d.Phone, o => o.MapFrom(s => s.Client.Phone))
-                .ForMember(d => d.Email, o => o.MapFrom(s => s.Client.Email));
+                .ForMember(d => d.Email, o => o.MapFrom(s => s.Client.Email))
+                .ForMember(d => d.Details, o => o.MapFrom(MapOrderResponseDetails));
 
             CreateMap<CreateOrderRequest, Order>()
                 .ForMember(d => d.OrderDetails, o => o.MapFrom(Order_OrderDetails));
@@ -114,6 +115,31 @@ namespace pizza_orders.Mapper
             foreach (var item in createOrderRequest.Details)
             {
                 result.Add(new OrderDetail() { PizzaId = item.PizzaId, Quantity = item.Quantity });
+            }
+
+            return result;
+        }
+
+        public List<OrderResponseDetail> MapOrderResponseDetails(Order order, OrderResponse orderResponse)
+        {
+            var result = new List<OrderResponseDetail>();
+
+            if (order.OrderDetails == null)
+            {
+                return result;
+            }
+
+            foreach (var item in order.OrderDetails)
+            {
+                result.Add(new OrderResponseDetail()
+                {
+                    PizzaId = item.PizzaId,
+                    Product = item.Pizza.Name,
+                    Quantity = item.Quantity,
+                    UnitPrize = item.UnitPrize,
+                    Discount = item.Discount,
+                    Amount = item.Amount
+                });
             }
 
             return result;
