@@ -36,8 +36,6 @@ namespace pizza_orders.Responses.Orders
         [JsonPropertyName("state")]
         public string State { get; set; }
 
-        //public List<OrderDetailResponse> OrderDetails { get; set; }
-
-
+        public List<OrderResponseDetail> Details { get; set; }
     }
 }
