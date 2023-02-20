@@ -53,7 +53,15 @@ namespace pizza_orders.Mapper
 
         private void OrderMapping()
         {
-            CreateMap<Order, OrderResponse>();
+            CreateMap<Order, OrderResponse>()
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Client.Name))
+                .ForMember(d => d.Address, o => o.MapFrom(s => s.Client.Address))
+                .ForMember(d => d.Phone, o => o.MapFrom(s => s.Client.Phone))
+                .ForMember(d => d.Email, o => o.MapFrom(s => s.Client.Email));
+
+
+
+
             CreateMap<CreateOrderRequest, Order>()
                 .ForMember(order => order.OrderDetails, options => options.MapFrom(Order_OrderDetails));
         }
