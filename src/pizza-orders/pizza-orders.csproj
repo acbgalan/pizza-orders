@@ -5,6 +5,7 @@
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>pizza_orders</RootNamespace>
+    <Copyright>Carlos Blanco 2023</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
