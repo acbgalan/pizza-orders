@@ -27,7 +27,10 @@ namespace pizza_orders.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
         public async Task<ActionResult> CreateOrder(CreateOrderRequest createOrderRequest)
         {
             if (createOrderRequest == null)
@@ -64,7 +67,10 @@ namespace pizza_orders.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Valor no esperado al guardar nuevo pedido");
             }
 
-            return Ok();
+            order = await _orderRepository.GetAsync(order.Id);
+
+            var orderResponse = _mapper.Map<OrderResponse>(order);
+            return CreatedAtRoute("GetOrder", new { id = order.Id }, orderResponse);
         }
 
 
