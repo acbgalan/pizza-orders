@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,9 +11,10 @@ using pizza_orders.Requests.Pizza;
 using pizza_orders.Responses.Pizza;
 
 namespace pizza_orders.Controllers
-{
+{    
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PizzasController : ControllerBase
     {
         private readonly IPizzaRepository _pizzaRepository;
@@ -25,6 +28,7 @@ namespace pizza_orders.Controllers
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<PizzaResponse>>> GetAllPizzas()
@@ -35,6 +39,7 @@ namespace pizza_orders.Controllers
             return Ok(pizzasResponses);
         }
 
+        [AllowAnonymous]
         [HttpGet("id:int", Name = "GetPizza")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
